@@ -1,18 +1,20 @@
+import plotly, json
 from worldbankapp import app
 from flask import render_template
-from wrangling_scripts.wrangling import data_wrangling
-
-data = data_wrangling()
+from wrangling_scripts.wrangling import return_figures
 
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html', data_set=data)
 
-@app.route('/project-one')
-def project_one():
-    return render_template('project-one.html')
+    figures = return_figures()
 
-@app.route('/project-two')
-def project_two():
-    return render_template('project-two.html')
+    # plot ids for the html id tag
+    ids = ['figure-{}'.format(i) for i, _ in enumerate(figures)]
+
+    # Convert the plotly figures to JSON for javascript in html template
+    figuresJSON = json.dumps(figures, cls=plotly.utils.PlotlyJSONEncoder)
+
+    return render_template('index.html',
+                           ids=ids,
+                           figuresJSON=figuresJSON)
