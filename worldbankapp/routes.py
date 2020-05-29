@@ -10,3 +10,7 @@ def index():
 @app.route('/project-one')
 def project_one():
     return render_template('project-one.html')
+
+@app.route('/project-two')
+def project_two():
+    return render_template('project-two.html')
